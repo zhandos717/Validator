@@ -6,14 +6,43 @@ class Validator
      * @var array $patterns
      */
     public $patterns = [
-        'words'         => '[\p{L}\s]+',
-        'tel'           => '[0-9+\s()-]+',
-        'text'          => '[\p{L}0-9\s-.,;:!"%&()?+\'°#\/@]+',
-        'file'          => '[\p{L}\s0-9-_!%&()=\[\]#@,.;+]+\.[A-Za-z0-9]{2,4}',
-        'folder'        => '[\p{L}\s0-9-_!%&()=\[\]#@,.;+]+',
-        'address'       => '[\p{L}0-9\s.,()°-]+',
-        'date_d-m-Y'      => '[0-9]{1,2}\-[0-9]{1,2}\-[0-9]{4}',
-        'date_Y-m-d'      => '[0-9]{4}\-[0-9]{1,2}\-[0-9]{1,2}',
+
+        'email'=>[
+            'expression' =>    '[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}',
+            'title' => 'Invalid email address'
+        ],
+        'date_dmY'    =>  [
+            'expression' =>    '[0-9]{1,2}\-[0-9]{1,2}\-[0-9]{4}',
+            'title' => 'Enter data as date, day-month-year'
+        ],
+        'date_Y-m-d'=>  [
+            'expression' =>    '[0-9]{4}\-[0-9]{1,2}\-[0-9]{1,2}',
+            'title' => 'Enter data as date, year-month-day'
+        ],
+        'tel'           => [
+            'expression' =>    '((8|\+7)[\- ]?)?(\(?\d{3}\)?[\- ]?)?[\d\- ]{7,10}',
+            'title' => 'Enter your phone number'
+        ],
+        'url' =>[
+            'expression'=> '(https?:\/\/)?([\w\d]+\.)?[\w\d]+\.\w+\/?.+',
+            'title' => 'Enter the URL correctly'
+        ],
+        'file'          => [
+            'expression' => '[\p{L}\s0-9-_!%&()=\[\]#\,.;+]+\.[A-Za-z0-9]{2,4}i',
+            'title' => 'Select a file with a correct name'
+        ],
+        'ZIP_codes'           => [
+            'expression' => '^\d{5}([\-]\d{4})?$',
+            'title' => 'Select a file with a correct name'
+        ],
+        'ip'            => [
+            'expression' => '\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}',
+            'title' => 'Enter the correct IP address. Example 127.0.0.1'
+        ],
+        'password'      => [
+            'expression' => '(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}',
+            'title'=> '8 or more characters, including at least one number, one uppercase, one lowercase'
+        ],
     ];
     /**
      * @var array $errors
@@ -68,7 +97,7 @@ class Validator
                 $this->errors[] = 'Field format ' . $this->name . ' incorrect.';
             }
         } else {
-            $regex = '/^(' . $this->patterns[$name] . ')$/u';
+            $regex = '/^(' . $this->patterns[$name]['expression'] . ')$/u';
             if ($this->value != '' && !preg_match($regex, $this->value)) {
                 $this->errors[] = 'Field format ' . $this->name . ' incorrect.';
             }
@@ -100,7 +129,7 @@ class Validator
     {
 
         if ((isset($this->file) && $this->file['error'] == 4) || ($this->value == '' || $this->value == null)) {
-            $this->errors[] = 'Обязательное  ' . $this->name . ' поле.';
+            $this->errors[] = 'Mandatory ' . $this->name . ' field.';
         }
         return $this;
     }
@@ -230,6 +259,8 @@ class Validator
     public static function is_int($value): bool
     {
         if (filter_var($value, FILTER_VALIDATE_INT)) return true;
+
+        return false;
     }
 
     /**
@@ -242,6 +273,8 @@ class Validator
     public static function is_float($value): bool
     {
         if (filter_var($value, FILTER_VALIDATE_FLOAT)) return true;
+
+        return false;
     }
 
     /**
@@ -254,6 +287,8 @@ class Validator
     public static function is_url($value): bool
     {
         if (filter_var($value, FILTER_VALIDATE_URL)) return true;
+
+        return false;
     }
 
     /**
@@ -265,7 +300,9 @@ class Validator
      */
     public static function is_bool($value): bool
     {
-        if (is_bool(filter_var($value, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE))) return true;
+        if (is_bool(filter_var($value, FILTER_VALIDATE_BOOLEAN))) return true;
+
+        return false;
     }
 
     /**
@@ -277,7 +314,9 @@ class Validator
      */
     public static function is_IPv4($value): bool
     {
-        if (is_bool(filter_var($value, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4))) return true;
+        if (is_bool(filter_var($value, FILTER_FLAG_IPV4))) return true;
+
+        return false;
     }
 
     /**
@@ -289,7 +328,9 @@ class Validator
      */
     public static function is_IPv6($value):bool
     {
-        if (is_bool(filter_var($value, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6))) return true;
+        if (is_bool(filter_var($value, FILTER_FLAG_IPV6))) return true;
+
+        return false;
     }
     /**
      * Check if the value is
@@ -301,5 +342,7 @@ class Validator
     public static function is_email($value): bool
     {
         if (filter_var($value, FILTER_VALIDATE_EMAIL)) return true;
+
+        return false;
     }
 }

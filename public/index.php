@@ -1,35 +1,70 @@
-  <?php 
-  
-  require '../src/Validator.php';
+<?php
+require '../src/Validator.php';
+$val = new Validator; ?>
+<!doctype html>
+<html lang="en">
 
-  $val = new Validator; ?>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Input validate</title>
+    <!-- Bootstrap core CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <!-- Custom styles for this template -->
+    <link href="css/style.css" rel="stylesheet">
+</head>
 
-  <form method="post" action="#">
-      <label for="name">Name:</label>
-      <input type="text" name="name" pattern="<?php echo $val->patterns['words']; ?>" required>
-      <label for="email">E-Mail:</label>
-      <input type="email" name="email" required>
-      <label for="tel">Telephone:</label>
-      <input type="text" name="tel" pattern="<?php echo $val->patterns['tel']; ?>">
-      <label for="message">Message:</label>
-      <textarea name="message" cols="40" rows="6" required></textarea>
-      <button type="submit">Send</button>
-  </form>
+<body class="text-center">
+    <div class="row">
 
-  <?php
 
-    if (!empty($_POST)) {
+        <?php if (!empty($_POST)) : ?>
+            <div class="col-12">
+                <?php
 
-        $val->name('name')->value($_POST['name'])->pattern('words')->required();
-        $val->name('e-mail')->value($_POST['email'])->pattern('email')->required();
-        $val->name('tel')->value($_POST['tel'])->pattern('tel');
-        $val->name('message')->value($_POST['message'])->pattern('text')->required();
+                if (Validator::is_email($_POST['email'])) {
+                    echo 'Емайл верный: ' . $_POST['email'];
+                }
 
-        if ($val->isSuccess()) {
-            echo 'Validation ok!';
-        } else {
-            echo $val->displayErrors();
-        }
-    }
+                if (Validator::is_IPv4($_POST['ip'])) {
+                    echo 'ip верный: ' . $_POST['ip'];
+                }
+                
 
-    ?>
+                $val->name('email')->value($_POST['email'])->pattern('email')->required();
+                $val->name('tel')->value($_POST['tel'])->pattern('tel');
+                $val->name('ip')->value($_POST['ip'])->pattern('ip');
+                $val->name('message')->value($_POST['message'])->required();
+
+                if ($val->isSuccess()) : ?>
+                    <div class="alert alert-success" role="alert">
+                        Validation ok!
+                    </div>
+                <? else : ?>
+                    <div class="alert alert-danger" role="alert">
+                        <?= $val->displayErrors() ?>
+                    </div>
+                <? endif; ?>
+            </div>
+        <? endif ?>
+
+        <div class="col-12">
+            <form action="" method="POST" class="form-signin">
+                <h1 class="h3 mb-3 font-weight-normal">Enter data </h1>
+                <input type="email" class="form-control" name="email" placeholder="Email address">
+                <!-- <input type="password" name="password" pattern="<?= $val->patterns['password']['expression']; ?>" title='<?= $val->patterns['password']['title']; ?>' placeholder="password" class="form-control"> -->
+
+                <input type="text" name="tel" required pattern="<?= $val->patterns['tel']['expression']; ?>" title='<?= $val->patterns['tel']['title']; ?>' placeholder="8 777 777 77 77" class="form-control">
+                <br>
+                <input type="text" name="ip" required pattern="<?= $val->patterns['ip']['expression']; ?>" title='<?= $val->patterns['ip']['title']; ?>' placeholder="0.0.0.0" class="form-control">
+                <br>
+                <textarea name="message" id="" class="form-control"></textarea>
+                <br>
+                <button class="btn btn-lg btn-primary btn-block" type="submit">Verify</button>
+            </form>
+        </div>
+
+    </div>
+</body>
+
+</html>
