@@ -1,6 +1,4 @@
 <a name="index_block"></a>
-
-=================
 <a name="block1"></a>
 ## 1. Installation [↑](#index_block)
 ### when declaring a class, we immediately pass the error page

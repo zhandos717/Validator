@@ -12,8 +12,8 @@ class Validator
         'file'          => '[\p{L}\s0-9-_!%&()=\[\]#@,.;+]+\.[A-Za-z0-9]{2,4}',
         'folder'        => '[\p{L}\s0-9-_!%&()=\[\]#@,.;+]+',
         'address'       => '[\p{L}0-9\s.,()°-]+',
-        'date_dmy'      => '[0-9]{1,2}\-[0-9]{1,2}\-[0-9]{4}',
-        'date_ymd'      => '[0-9]{4}\-[0-9]{1,2}\-[0-9]{1,2}',
+        'date_d-m-Y'      => '[0-9]{1,2}\-[0-9]{1,2}\-[0-9]{4}',
+        'date_Y-m-d'      => '[0-9]{4}\-[0-9]{1,2}\-[0-9]{1,2}',
     ];
     /**
      * @var array $errors
@@ -206,7 +206,7 @@ class Validator
     /**
      * View validation result
      *
-     * @return booelan|string
+     * @return bool|string
      */
     public function result():mixed
     {
@@ -225,7 +225,7 @@ class Validator
      * an integer
      *
      * @param mixed $value
-     * @return boolean
+     * @return bool
      */
     public static function is_int($value): bool
     {
@@ -237,7 +237,7 @@ class Validator
      * a float number
      *
      * @param mixed $value
-     * @return boolean
+     * @return bool
      */
     public static function is_float($value): bool
     {
@@ -249,7 +249,7 @@ class Validator
      * un url
      *
      * @param mixed $value
-     * @return boolean
+     * @return bool
      */
     public static function is_url($value): bool
     {
@@ -261,7 +261,7 @@ class Validator
      * boolean
      *
      * @param mixed $value
-     * @return boolean
+     * @return bool
      */
     public static function is_bool($value): bool
     {
@@ -273,7 +273,7 @@ class Validator
      * Internet Protocol version 4
      *
      * @param mixed $value
-     * @return boolean
+     * @return bool
      */
     public static function is_IPv4($value): bool
     {
@@ -285,7 +285,7 @@ class Validator
      * Internet Protocol version 6
      *
      * @param mixed $value
-     * @return boolean
+     * @return bool
      */
     public static function is_IPv6($value):bool
     {
@@ -293,10 +293,10 @@ class Validator
     }
     /**
      * Check if the value is
-     * e-mail
+     * email
      *
      * @param mixed $value
-     * @return boolean
+     * @return bool
      */
     public static function is_email($value): bool
     {
